@@ -108,7 +108,7 @@ final class EventRequestVO
         $location_name = null,
         $location_title = null,
         $location_lat = null,
-        $location_lng = null,
+        $location_lng = null
     )
     {
         $this->prod_id         = $prod_id;
