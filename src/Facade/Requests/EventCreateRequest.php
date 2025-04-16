@@ -15,6 +15,7 @@
 use CalDAVClient\Facade\Utils\ICalTimeZoneBuilder;
 use Eluceo\iCal\Component\Event;
 use DateTime;
+use Eluceo\iCal\Component\Alarm;
 
 /**
  * Class EventCreateRequest
@@ -69,6 +70,16 @@ class EventCreateRequest implements IAbstractWebDAVRequest
         if(!empty($this->vo->getLocationTitle())){
             $geo = sprintf("%s;%s", $this->vo->getLocationLat(), $this->vo->getLocationLng());
             $event->setLocation($this->vo->getLocationTitle(), $this->vo->getLocationTitle(), $geo);
+        }
+
+        $minutesBefore = $this->vo->getReminderMinutesBeforeStart();
+
+        if ($minutesBefore !== null) {
+            $alarm = new Alarm();
+            $alarm->setAction('DISPLAY');
+            $alarm->setTrigger('-PT' . $minutesBefore . 'M');
+            $alarm->setDescription('Event Reminder');
+            $event->addComponent($alarm);
         }
 
         $calendar->addComponent($event);
